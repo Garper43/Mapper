@@ -6,33 +6,61 @@ canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
 map = {
-    image: new Image(),
+    image: {
+        file: new Image(),
+        //these dimentions are placeholders and will be replaced in image.file.onload()
+        //they are used for calculating displayed image size
+        baseWidth: 0,
+        baseHeight: 0,
+        //these dimentions are placeholders and will be replaced in scroll events
+        //displayed dimentions are actual dimentions that will be drawn
+        displayWidth: 0,
+        displayHeight: 0,
+    },
+    //offset
     x: 0,
     y: 0,
-    width: 100, //replaced after loading the map image
-    height: 100, //replaced after loading the map image
+
     drag: false,
     dragStart: {
         x: 0,
         y: 0
     },
+    scale: 1,
 }
 
-//load map map.image
-map.image.src = "map.png";
-map.image.onload = function() {
-    //set map image size
-    map.width = canvas.height * (map.image.naturalWidth/map.image.naturalHeight);
-    map.height = canvas.height;
+//load map map.image.file
+map.image.file.src = "map.png";
+map.image.file.onload = function() {
+    let imgWidth = map.image.file.naturalWidth;
+    let imgHeight = map.image.file.naturalHeight;
 
-    ctx.drawImage(map.image, map.x, map.y, map.width, map.height);
+    //set base image size and offset
+    if(imgHeight > imgWidth) {
+        map.image.baseWidth = canvas.height * (imgWidth/imgHeight);
+        map.image.baseHeight = canvas.height;
+
+        map.x = (canvas.width - map.image.baseWidth) / 2;
+    } else {
+        map.image.baseHeight = canvas.width * (imgHeight/imgWidth);
+        map.image.baseWidth = canvas.width;
+
+        map.y = (canvas.height - map.image.baseHeight) / 2;
+    }
+    
+    //set initial display image size
+    map.image.displayWidth = map.image.baseWidth * map.scale;
+    map.image.displayHeight = map.image.baseHeight * map.scale;
+
+    //initial image draw
+    ctx.drawImage(map.image.file, map.x, map.y, map.image.baseWidth, map.image.baseHeight);
 }
-map.image.src = "gtavmap.svg";
+map.image.file.src = "gtavmap.svg";
 
 //update map
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(map.image, map.x, map.y, map.width, map.height);
+    ctx.drawImage(map.image.file, map.x, map.y, map.image.displayWidth, map.image.displayHeight);
 }
 
 //map control
@@ -46,12 +74,17 @@ canvas.addEventListener("wheel", function(event) {
     if (event.deltaY < 0) {
         direction = direction * -1;
     }
+    
+    map.scale = map.scale + (map.scale * ZOOM_SPEED * direction);
+
     //move the map
     map.x = map.x - (cX - map.x) * ZOOM_SPEED * direction;
     map.y = map.y - (cY - map.y) * ZOOM_SPEED * direction;
     //scale the map
-    map.width = map.width + (map.width * direction * ZOOM_SPEED);
-    map.height = map.height + (map.height * direction * ZOOM_SPEED);
+    map.image.displayWidth = (map.image.baseWidth * map.scale);
+    map.image.displayHeight = (map.image.baseHeight * map.scale);
+
+    //update canvas
     window.requestAnimationFrame(update);
 });
 
@@ -60,9 +93,15 @@ canvas.addEventListener("mousedown", function (event) {
     map.drag = true;
     map.dragStart.x = map.x - event.clientX * 1.5;
     map.dragStart.y = map.y - event.clientY * 1.5;
+
+    //make canvas overlay the toolbar so that dragging it over the toolbar doesn't stop the drag
+    canvas.style.zIndex = "2";
 });
 canvas.addEventListener("mouseup", function (event) {
     map.drag = false;
+
+    //reset canvas z-index
+    canvas.style.zIndex = "0";
 });
 canvas.addEventListener("mousemove", function (event) {
     //return if drag is off
