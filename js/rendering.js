@@ -1,15 +1,16 @@
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const ctxMap = canvas.getContext('2d');
+const ctxMarkers = canvas.getContext('2d');
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
-//ctx.webkitImageSmoothingEnabled = false;
-//ctx.mozImageSmoothingEnabled = false;
-//ctx.imageSmoothingEnabled = false;
+//ctxMap.webkitImageSmoothingEnabled = false;
+//ctxMap.mozImageSmoothingEnabled = false;
+//ctxMap.imageSmoothingEnabled = false;
 
 //update map
 function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(map.image.file, map.x, map.y, map.image.displayWidth, map.image.displayHeight);
+    ctxMap.clearRect(0, 0, canvas.width, canvas.height);
+    ctxMap.drawImage(map.image.file, map.x, map.y, map.image.displayWidth, map.image.displayHeight);
 }
 
 //load map map.image.file
@@ -36,5 +37,5 @@ map.image.file.onload = function() {
     map.image.displayHeight = map.image.baseHeight * map.scale;
 
     //initial image draw
-    ctx.drawImage(map.image.file, map.x, map.y, map.image.baseWidth, map.image.baseHeight);
+    ctxMap.drawImage(map.image.file, map.x, map.y, map.image.baseWidth, map.image.baseHeight);
 }

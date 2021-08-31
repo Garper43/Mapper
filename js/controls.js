@@ -1,6 +1,8 @@
 //map control
 //scroll event
 canvas.addEventListener("wheel", function(event) {
+    if(map.drag) {return}
+
     let direction = -1;
     //cursor coordinates
     let cX = event.clientX;
@@ -25,14 +27,18 @@ canvas.addEventListener("wheel", function(event) {
 
 //drag events
 canvas.addEventListener("mousedown", function (event) {
+    if(event.button != 1) {return} //check for middle mouse button
+
     map.drag = true;
-    map.dragStart.x = map.x - event.clientX * 1.5;
-    map.dragStart.y = map.y - event.clientY * 1.5;
+    map.dragStart.x = map.x - event.clientX * DRAG_SPEED;
+    map.dragStart.y = map.y - event.clientY * DRAG_SPEED;
 
     //make canvas overlay the toolbar so that dragging it over the toolbar doesn't stop the drag
     canvas.style.zIndex = "2";
 });
 canvas.addEventListener("mouseup", function (event) {
+    if(event.button != 1) {return}  //check for middle mouse button
+
     map.drag = false;
 
     //reset canvas z-index
@@ -41,7 +47,7 @@ canvas.addEventListener("mouseup", function (event) {
 canvas.addEventListener("mousemove", function (event) {
     //return if drag is off
     if (!map.drag) { return }
-    map.x = map.dragStart.x + event.clientX * 1.5;
-    map.y = map.dragStart.y + event.clientY * 1.5;
+    map.x = map.dragStart.x + event.clientX * DRAG_SPEED;
+    map.y = map.dragStart.y + event.clientY * DRAG_SPEED;
     window.requestAnimationFrame(update);
 });

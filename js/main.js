@@ -1,5 +1,3 @@
-const ZOOM_SPEED = 0.2;
-
 map = {
     image: {
         file: new Image(),
