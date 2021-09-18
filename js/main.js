@@ -1,6 +1,9 @@
 map = {
     image: {
         file: new Image(),
+        
+        x: 0,
+        y: 0,
 
         //TODO: do something
         src: "assets/gtavmap.svg",
@@ -20,9 +23,24 @@ map = {
     y: 0,
 
     drag: false,
+    draw: false,
     dragStart: {
         x: 0,
         y: 0
     },
     scale: 1,
+}
+
+let drawing = {
+    selBrush: undefined, //index of the selected brush inside
+    brushes: [],
+    draw: false,
+    clientX: undefined,
+    clientY: undefined,
+};
+
+function addBrush(color, thickness) {
+    let brush = new Brush(color, thickness);
+
+    drawing.brushes.push(brush);
 }
