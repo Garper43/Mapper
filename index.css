@@ -1,3 +1,8 @@
+:root {
+    --background :rgb(37, 37, 37);
+    --panel: rgb(41, 41, 41);
+}
+
 body, html {
     margin: 0px;
     width: 100%;
@@ -39,7 +44,7 @@ svg {
     position: absolute;
     right: 0px;
     background-color: rgba(34, 34, 34, 0.924);
-    z-index: 1;
+    z-index: 2;
 }
 
 #toolbar:after {

@@ -15,8 +15,8 @@ canvas.addEventListener("wheel", function(event) {
     map.scale = map.scale + (map.scale * ZOOM_SPEED * direction);
 
     //move the map
-    map.x = map.x - (cX - map.x) * ZOOM_SPEED * direction;
-    map.y = map.y - (cY - map.y) * ZOOM_SPEED * direction;
+    map.x = (map.x - (cX - map.x) * ZOOM_SPEED * direction);
+    map.y = (map.y - (cY - map.y) * ZOOM_SPEED * direction);
     //scale the map
     map.image.displayWidth = (map.image.baseWidth * map.scale);
     map.image.displayHeight = (map.image.baseHeight * map.scale);
@@ -26,7 +26,7 @@ canvas.addEventListener("wheel", function(event) {
         let brush = drawing.brushes[a];
 
         let x1,y1;
-        let x,y;
+        let x2,y2;
 
         for( b in brush.points.x ) { //loop through strokes
             for( c in brush.points.x[b] ) { //loop through points
@@ -39,8 +39,8 @@ canvas.addEventListener("wheel", function(event) {
                 y2 = y1 + (y1 - event.clientX) * (ZOOM_SPEED * direction);
 
                 //subtract scaled map offset coordinates from x2
-                brush.points.x[b][c] = x2 - (map.x + (map.x - event.clientX) * (ZOOM_SPEED * direction));
-                brush.points.y[b][c] = y2 - (map.y + (map.y - event.clientX) * (ZOOM_SPEED * direction));
+                brush.points.x[b][c] = (x2 - (map.x + (map.x - event.clientX) * (ZOOM_SPEED * direction)));
+                brush.points.y[b][c] = (y2 - (map.y + (map.y - event.clientX) * (ZOOM_SPEED * direction)));
             }  
         }    
     }
@@ -50,12 +50,12 @@ canvas.addEventListener("wheel", function(event) {
 });
 
 canvas.addEventListener("mousedown", function (event) {
-    if(event.button == 1) { dragStart(event) } //check for middle mouse button
-    else if(event.button == 0 && drawing.selBrush != undefined) { brushStart() }
+    if(event.button == 1) { dragStart(event) }                                                     //check for middle mouse button
+    else if(event.button == 0 && drawing.selBrush != undefined) { brushStart() ; addPoint(event) } //check for left mouse button
 });
-canvas.addEventListener("mouseup", function (event) {
+window.addEventListener("mouseup", function (event) {
     if(event.button == 1) { dragEnd(event) }  //check for middle mouse button
-    else if(event.button == 0) { brushEnd() }
+    else if(event.button == 0) { brushEnd() } //check for left mouse button
 });
 canvas.addEventListener("mousemove", function (event) {
     //return if drag is off
@@ -78,7 +78,7 @@ function dragEnd(event) {
     map.drag = false;
 
     //reset canvas z-index
-    canvas.style.zIndex = "0";
+    canvas.style.zIndex = "1";
 }
 function moveMap(event) {
     map.x = map.dragStart.x + event.clientX * DRAG_SPEED;
@@ -100,10 +100,10 @@ function brushStart() {
 function addPoint(event) {
     let brush = drawing.brushes[drawing.selBrush];
 
-    brush.points.x[brush.points.x.length - 1].push(event.clientX - map.x);
-    brush.points.y[brush.points.y.length - 1].push(event.clientY - map.y);
+    brush.points.x[brush.points.x.length - 1].push(~~(event.clientX - map.x));
+    brush.points.y[brush.points.y.length - 1].push(~~(event.clientY - map.y));
 
-    update();
+    window.requestAnimationFrame(update);
 }
 
 function brushEnd() {

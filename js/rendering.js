@@ -68,12 +68,13 @@ function drawBrushes() {
             ctx.lineWidth = brush.thickness * map.scale;
             ctx.beginPath();
 
-            ctx.moveTo(brush.points.x[0], brush.points.y[0]);
+            ctx.moveTo(~~(brush.points.x[b][0] + map.x), ~~(brush.points.y[b][0] + map.y));
 
             for( c in brush.points.x[b] ) {
-                ctx.lineTo(brush.points.x[b][c] + map.x, brush.points.y[b][c] + map.y);
-                ctx.stroke();
+                ctx.lineTo(~~(brush.points.x[b][c] + map.x), ~~(brush.points.y[b][c] + map.y));
             }
+
+            ctx.stroke();
         }
     }
     

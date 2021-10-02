@@ -35,8 +35,6 @@ let drawing = {
     selBrush: undefined, //index of the selected brush inside
     brushes: [],
     draw: false,
-    clientX: undefined,
-    clientY: undefined,
 };
 
 function addBrush(color, thickness) {
