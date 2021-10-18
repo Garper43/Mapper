@@ -22,8 +22,9 @@ canvas.addEventListener("wheel", function(event) {
     map.image.displayHeight = (map.image.baseHeight * map.scale);
 
     //scale brushes
-    for( a in drawing.brushes ) { //loop through brushes
-        let brush = drawing.brushes[a];
+    //TODO: make this readable
+    for( a in brushTool.brushes ) { //loop through brushes
+        let brush = brushTool.brushes[a];
 
         let x1,y1;
         let x2,y2;
@@ -49,18 +50,25 @@ canvas.addEventListener("wheel", function(event) {
     window.requestAnimationFrame(update);
 });
 
+document.addEventListener('contextmenu', e => {
+    e.preventDefault();
+});
+
 canvas.addEventListener("mousedown", function (event) {
-    if(event.button == 1) { dragStart(event) }                                                     //check for middle mouse button
-    else if(event.button == 0 && drawing.selBrush != undefined) { brushStart() ; addPoint(event) } //check for left mouse button
+    if(event.button == 1) { dragStart(event) } //start dragging map
+    else if(event.button == 0 && brushTool.selBrush != undefined && brushTool.activeTool == "pencil") { brushTool.pencilStart() ; brushTool.addPoint(event) } //start draw using pencil
+    else if(event.button == 0 && brushTool.selBrush != undefined && !brushTool.poly && brushTool.activeTool == "poly") { brushTool.polyStart() ; brushTool.addPoint(event) } // start draw using poly
+    else if(event.button == 0 && brushTool.selBrush != undefined && brushTool.poly && brushTool.activeTool == "poly") { brushTool.addPoint(event) } //draw using poly
+    else if(event.button == 2 && brushTool.selBrush != undefined && brushTool.poly && brushTool.activeTool == "poly") { brushTool.polyEnd() } //stop draw using poly
 });
 window.addEventListener("mouseup", function (event) {
-    if(event.button == 1) { dragEnd(event) }  //check for middle mouse button
-    else if(event.button == 0) { brushEnd() } //check for left mouse button
+    if(event.button == 1) { dragEnd(event) }  //map drag stop
+    else if(event.button == 0) { brushTool.pencilEnd() } //pencil draw stop
 });
 canvas.addEventListener("mousemove", function (event) {
     //return if drag is off
-    if (map.drag) { moveMap(event) }
-    else if (drawing.draw) { addPoint(event) }
+    if (map.drag) { moveMap(event) } //move map
+    else if (brushTool.pencil) { brushTool.addPoint(event) } //add brushTool point
 });
 
 
@@ -74,38 +82,17 @@ function dragStart(event) {
     //make canvas overlay the toolbar so that dragging it over the toolbar doesn't stop the drag
     canvas.style.zIndex = "2";
 }
+
 function dragEnd(event) {
     map.drag = false;
 
     //reset canvas z-index
     canvas.style.zIndex = "1";
 }
+
 function moveMap(event) {
     map.x = map.dragStart.x + event.clientX * DRAG_SPEED;
     map.y = map.dragStart.y + event.clientY * DRAG_SPEED;
     
     window.requestAnimationFrame(update);
-}
-
-
-
-//BRUSH CONTROLS
-function brushStart() {
-    drawing.draw = true;
-
-    drawing.brushes[drawing.selBrush].points.x.push([]);
-    drawing.brushes[drawing.selBrush].points.y.push([]);
-}
-
-function addPoint(event) {
-    let brush = drawing.brushes[drawing.selBrush];
-
-    brush.points.x[brush.points.x.length - 1].push(~~(event.clientX - map.x));
-    brush.points.y[brush.points.y.length - 1].push(~~(event.clientY - map.y));
-
-    window.requestAnimationFrame(update);
-}
-
-function brushEnd() {
-    drawing.draw = false;
 }

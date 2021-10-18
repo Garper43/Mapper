@@ -15,12 +15,11 @@ function update() {
     drawBrushes();
 }
 
-//MAP STUFF
-//load map map.image.file
+//load map.image.file
 map.image.file.src = map.image.src;
 map.image.file.onload = function() {
-    let imgWidth = map.image.file.naturalWidth;
-    let imgHeight = map.image.file.naturalHeight;
+let imgWidth = map.image.file.naturalWidth;
+let imgHeight = map.image.file.naturalHeight;
 
     //set base image size and offset
     if(imgHeight > imgWidth) {
@@ -43,40 +42,27 @@ map.image.file.onload = function() {
     update();
 }
 
-//BRUSH STUFF
 function drawBrushes() {
-    for( a in drawing.brushes ) { //loop through brushes
+    for( a in brushTool.brushes ) { //loop through brushes
 
-        let brush = drawing.brushes[a];
+        let brush = brushTool.brushes[a];
         ctx.fillStyle = brush.color;
         ctx.strokeStyle = brush.color;
         ctx.lineCap = 'round';
 
         for( b in brush.points.x ) { //loop through strokes
-            //draw circles
-            // ctx.lineWidth = 0.1;
-
-            // for( c in brush.points.x[b] ) { //loop through points
-            //     ctx.beginPath();
-
-            //     ctx.arc(brush.points.x[b][c] + map.x, brush.points.y[b][c] + map.y, (brush.thickness/2) * map.scale, 0, 2 * Math.PI);  
-                
-            //     ctx.fill();
-            // }
-
             //draw lines
             ctx.lineWidth = brush.thickness * map.scale;
             ctx.beginPath();
 
             ctx.moveTo(~~(brush.points.x[b][0] + map.x), ~~(brush.points.y[b][0] + map.y));
 
-            for( c in brush.points.x[b] ) {
+            for( c in brush.points.x[b] ) { //loop through points
                 ctx.lineTo(~~(brush.points.x[b][c] + map.x), ~~(brush.points.y[b][c] + map.y));
             }
 
             ctx.stroke();
         }
-    }
-    
+    } 
 }
 

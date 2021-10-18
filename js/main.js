@@ -31,14 +31,48 @@ map = {
     scale: 1,
 }
 
-let drawing = {
-    selBrush: undefined, //index of the selected brush inside
-    brushes: [],
-    draw: false,
-};
+let brushTool = {
+    selBrush: undefined, //index of the selected brush inside brushTool.brushes
+    brushes: [], //stores every brush object
+    poly: false,
+    activeTool: undefined,
 
-function addBrush(color, thickness) {
-    let brush = new Brush(color, thickness);
+    //methods
+    addBrush: function addBrush(color, thickness) {
+        let brush = new Brush(color, thickness);
+    
+        this.brushes.push(brush);
+        //brushTool.selBrush = brushTool.brushes.length - 1;
+        ui.addBrushBtn(color);
+    },
+    addPoint: function addPoint(event) {
+        let brush = this.brushes[this.selBrush];
+    
+        brush.points.x[brush.points.x.length - 1].push((event.clientX - map.x));
+        brush.points.y[brush.points.y.length - 1].push((event.clientY - map.y));
+    
+        window.requestAnimationFrame(update);
+    },
 
-    drawing.brushes.push(brush);
+    //pencil methods
+    pencilStart: function pencilStart() {
+        this.pencil = true;
+    
+        this.brushes[this.selBrush].points.x.push([]);
+        this.brushes[this.selBrush].points.y.push([]);
+    },
+    pencilEnd: function pencilEnd() {
+        this.pencil = false;
+    },
+
+    //poly methods
+    polyStart: function polyStart() {
+        this.poly = true;
+    
+        this.brushes[this.selBrush].points.x.push([]);
+        this.brushes[this.selBrush].points.y.push([]);
+    },
+    polyEnd: function polyEnd() {
+        this.poly = false;
+    }
 }

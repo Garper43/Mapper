@@ -1,6 +1,10 @@
 :root {
     --background :rgb(37, 37, 37);
-    --panel: rgb(41, 41, 41);
+    --panel: rgb(26, 26, 26);
+    --text-color1: rgb(219, 219, 219);
+    --text-color2: rgb(185, 185, 185);
+    --accent1: rgb(221, 183, 34);
+    --accent2: rgb(88, 88, 88);
 }
 
 body, html {
@@ -9,6 +13,19 @@ body, html {
     height: 100%;
     background-color: rgb(37, 37, 37);
     overflow: hidden;
+    color: var(--text-color2);
+    font-family: Helvetica, sans-serif;
+    font-size: 1em;
+}
+
+button, input {
+    color: var(--text-color1);
+    height: 100%;
+    padding: 0px 10px;
+    font-size: 1em;
+    margin: 0px 2.5px;
+    background-color: var(--background);
+    border: solid white 1px;
 }
 
 #map-wrapper {
@@ -38,19 +55,134 @@ svg {
     position: absolute;
 }
 
-#toolbar {
+#toolbar-wrapper {
     width: 20%;
-    height: 50%;
+    height: 70%;
+    margin-top: 5%;
     position: absolute;
     right: 0px;
-    background-color: rgba(34, 34, 34, 0.924);
+    background-color: var(--panel);
     z-index: 2;
+    padding: 1%;
 }
 
-#toolbar:after {
+#toolbar-wrapper:before {
+    position: absolute;
     content: "";
     display: block;
-    width: 100px;
-    height: 100px;
-    background-color: red;;
+    width: calc(100% + 5px);
+    height: 5px;
+    left: -5px;
+    top: -5px;
+    background-color: var(--accent1);
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 0, 0.479);
+}
+
+#toolbar-wrapper:after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: calc(100% + 5px);
+    height: 5px;
+    left: -5px;
+    bottom: -5px;
+    background-color: var(--accent1);
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 0, 0.479);
+}
+
+#toolbar-wrapper h2 {
+    width: 100%;
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: 2em;
+    color: var(--text-color1);
+}
+
+#toolbar {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.tool {
+
+}
+
+.tool:hover ,#brushes > button:hover {
+    border: solid var(--accent1) 1px;
+}
+
+#brushes {
+    width: 100%;
+    height: max-content;
+    margin: 30px 0px 30px 0px;
+    border-top: 2px solid var(--accent2);
+    padding: 30px 0px 0px 0px;
+}
+
+#brushes > button {
+    width: 100%;
+    padding: 10px 40px;
+}
+
+#brushes-container {
+    width: 100%;
+    height: max-content;
+    margin: 10px 0px 0px 0px;
+    padding: 10px;
+}
+
+.brush {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 0px;
+    border-left: 4px solid white;
+    border-right: 4px solid white;
+}
+
+#brush-properties {
+    width: 100%;
+    height: max-content;
+    margin: 30px 0px 30px 0px;
+    border-top: 2px solid var(--accent2);
+    padding: 0px 10px 0px 10px;
+}
+
+#brush-properties input {
+    height: 100%;
+    margin-left: 10px;
+}
+
+#brush-properties div {
+    margin: 25px 0px;
+    height: 1em;
+}
+
+#brush-properties p {
+    font-size: 1.5em;
+    width: max-content;
+}
+
+#brush-properties div > * {
+    display: inline;
+}
+
+#name-input {
+
+}
+
+#color-picker {
+    width: 2em;
+    height: 1em;
+    padding: 0px;
+}
+
+#thickness-input {
+    width: 5em;
+}
+
+input[type="color"] {
+	padding: 0px;
+    border: 0px solid white;
 }
