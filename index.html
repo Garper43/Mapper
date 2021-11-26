@@ -7,13 +7,16 @@
     <title>Mapper</title>
 </head>
 <body>
+    <template id="waypoint-template" >
+        <div class="waypoint" ></div>
+    </template>
 
     <div id="toolbar-wrapper" >
-        <h2>Toolbar</h2>
+        <!--<h2>Toolbar</h2>-->
         <div id="toolbar" >
             <button id="pencil" class="tool">pencil</button>
             <button id="poly" class="tool">polygon</button>
-            <button class="tool">eraser</button>
+            <button id="waypoint" class="tool">waypoint</button>
         </div>
         <div id="brush-properties" >
             <div><p>Name<input id="name-input" value="New Brush" ></p></div>
@@ -26,8 +29,12 @@
             </div>
         </div>
     </div>    
-        
-    <canvas id=canvas ></canvas>
+    
+    <div id="waypoint-container" >
+        <canvas id=canvas ></canvas>     
+    </div>
+       
+    
     <!-- stole that grid from CodePen https://codepen.io/pigabo/pen/eAiLF -->
     
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -44,15 +51,21 @@
     </svg>
 
     <!-- classes-->
-    <script src="js/classes/Brush.js"></script>
+    <script src="js/tools/classes/Brush.js"></script>
+    <script src="js/tools/classes/Waypoint.js"></script>
 
     <!-- main-->
     <script src="js/main.js"></script>
+    <script src="js/tool.js"></script>
     <script src="js/config.js"></script>
+
+    <script src="js/tools/pencil.js"></script>
+    <script src="js/tools/poly.js"></script>
+    <script src="js/tools/waypoint.js"></script>
 
     <!-- other-->
     <script src="js/map_controls.js"></script>
-    <script src="js/tool_controls.js"></script>
+    <script src="js/ui_controls.js"></script>
     <script src="js/rendering.js"></script>
 </body>
 

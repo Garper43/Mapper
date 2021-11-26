@@ -3,9 +3,9 @@ const ctx = canvas.getContext('2d');
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
-//ctx.webkitImageSmoothingEnabled = false;
-//ctx.mozImageSmoothingEnabled = false;
-//ctx.imageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.mozImageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false;
 
 //update canvas
 function update() {
@@ -13,13 +13,14 @@ function update() {
     ctx.drawImage(map.image.file, map.image.x + map.x, map.image.y + map.y, map.image.displayWidth, map.image.displayHeight);
 
     drawBrushes();
+    drawWaypoints();
 }
 
 //load map.image.file
 map.image.file.src = map.image.src;
 map.image.file.onload = function() {
-let imgWidth = map.image.file.naturalWidth;
-let imgHeight = map.image.file.naturalHeight;
+    let imgWidth = map.image.file.naturalWidth;
+    let imgHeight = map.image.file.naturalHeight;
 
     //set base image size and offset
     if(imgHeight > imgWidth) {
@@ -42,10 +43,16 @@ let imgHeight = map.image.file.naturalHeight;
     update();
 }
 
-function drawBrushes() {
-    for( a in brushTool.brushes ) { //loop through brushes
+//load marker file
+tool.waypoint.icon.src = "assets/waypoint_icon.png";
+tool.waypoint.icon.onload = function() {
+    update();
+}
 
-        let brush = brushTool.brushes[a];
+function drawBrushes() {
+    for( a in tool.brush.brushes ) { //loop through brushes
+
+        let brush = tool.brush.brushes[a];
         ctx.fillStyle = brush.color;
         ctx.strokeStyle = brush.color;
         ctx.lineCap = 'round';
@@ -64,5 +71,11 @@ function drawBrushes() {
             ctx.stroke();
         }
     } 
+}
+
+function drawWaypoints() {
+    for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
+        ctx.drawImage(tool.waypoint.icon, tool.waypoint.waypoints[i].x + map.x - 10, tool.waypoint.waypoints[i].y + map.y - 20, 20, 20);
+    }
 }
 

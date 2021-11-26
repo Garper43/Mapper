@@ -1,14 +1,13 @@
-//GENERAL CONTROLS
 //EVENTS
-canvas.addEventListener("wheel", function(event) {
+canvas.addEventListener("wheel", (ev) => {
     if(map.drag) {return}
 
     let direction = -1;
     //cursor coordinates
-    let cX = event.clientX;
-    let cY = event.clientY;
+    let cX = ev.clientX;
+    let cY = ev.clientY;
     //check scroll direction
-    if (event.deltaY < 0) {
+    if (ev.deltaY < 0) {
         direction = direction * -1;
     }
     
@@ -23,76 +22,104 @@ canvas.addEventListener("wheel", function(event) {
 
     //scale brushes
     //TODO: make this readable
-    for( a in brushTool.brushes ) { //loop through brushes
-        let brush = brushTool.brushes[a];
+    for( a in tool.brush.brushes ) { //loop through brushes
+        let brush = tool.brush.brushes[a];
 
-        let x1,y1;
-        let x2,y2;
-
-        for( b in brush.points.x ) { //loop through strokes
-            for( c in brush.points.x[b] ) { //loop through points
-                //starting value of x
-                x1 = brush.points.x[b][c] + map.x;
-                y1 = brush.points.y[b][c] + map.y;
-
-                //scaled value of x
-                x2 = x1 + (x1 - event.clientX) * (ZOOM_SPEED * direction);
-                y2 = y1 + (y1 - event.clientX) * (ZOOM_SPEED * direction);
-
-                //subtract scaled map offset coordinates from x2
-                brush.points.x[b][c] = (x2 - (map.x + (map.x - event.clientX) * (ZOOM_SPEED * direction)));
-                brush.points.y[b][c] = (y2 - (map.y + (map.y - event.clientX) * (ZOOM_SPEED * direction)));
+        for( b in brush.points.x ) { //loop through  brush strokes
+            for( c in brush.points.x[b] ) { //loop through  brush points
+                brush.points.x[b][c] = scaleCoordinate(brush.points.x[b][c], cX, ZOOM_SPEED * direction);
+                brush.points.y[b][c] = scaleCoordinate(brush.points.y[b][c], cY, ZOOM_SPEED * direction);
             }  
         }    
+    }
+
+    //scale waypoints
+    for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
+        tool.waypoint.waypoints[i].x = scaleCoordinate(tool.waypoint.waypoints[i].x, cX, ZOOM_SPEED * direction);
+        tool.waypoint.waypoints[i].y = scaleCoordinate(tool.waypoint.waypoints[i].y, cY, ZOOM_SPEED * direction);
     }
 
     //update canvas
     window.requestAnimationFrame(update);
 });
 
-document.addEventListener('contextmenu', e => {
-    e.preventDefault();
+
+canvas.addEventListener("mousedown", (ev) => {
+    if(ev.button == 1) { 
+        dragStart(ev) 
+
+    } else if(ev.button == 0) {
+        tool.selTool.LMBPressEvent(ev);
+
+    } else if(ev.button == 2) {
+        tool.selTool.RMBPressEvent(ev);
+
+    }
+});
+canvas.addEventListener("mouseup", (ev) => {
+    if(ev.button == 1) { 
+        dragEnd(ev) 
+
+    } else if(ev.button == 0) {
+        tool.selTool.LMBReleaseEvent(ev);
+
+    } else if(ev.button == 2) {
+        tool.selTool.RMBReleaseEvent(ev);
+
+    }
+});
+canvas.addEventListener("mousemove", (ev) => {
+    if (map.drag) { moveMap(ev) } //move map
+    else if(tool.selTool != undefined) {
+        tool.selTool.mouseMoveEvent(ev);
+    }
 });
 
-canvas.addEventListener("mousedown", function (event) {
-    if(event.button == 1) { dragStart(event) } //start dragging map
-    else if(event.button == 0 && brushTool.selBrush != undefined && brushTool.activeTool == "pencil") { brushTool.pencilStart() ; brushTool.addPoint(event) } //start draw using pencil
-    else if(event.button == 0 && brushTool.selBrush != undefined && !brushTool.poly && brushTool.activeTool == "poly") { brushTool.polyStart() ; brushTool.addPoint(event) } // start draw using poly
-    else if(event.button == 0 && brushTool.selBrush != undefined && brushTool.poly && brushTool.activeTool == "poly") { brushTool.addPoint(event) } //draw using poly
-    else if(event.button == 2 && brushTool.selBrush != undefined && brushTool.poly && brushTool.activeTool == "poly") { brushTool.polyEnd() } //stop draw using poly
-});
-window.addEventListener("mouseup", function (event) {
-    if(event.button == 1) { dragEnd(event) }  //map drag stop
-    else if(event.button == 0) { brushTool.pencilEnd() } //pencil draw stop
-});
-canvas.addEventListener("mousemove", function (event) {
-    //return if drag is off
-    if (map.drag) { moveMap(event) } //move map
-    else if (brushTool.pencil) { brushTool.addPoint(event) } //add brushTool point
-});
+
 
 
 
 //FUNCTIONS
-function dragStart(event) {
+function dragStart(ev) {
     map.drag = true;
-    map.dragStart.x = map.x - event.clientX * DRAG_SPEED;
-    map.dragStart.y = map.y - event.clientY * DRAG_SPEED;
+    map.dragStart.x = map.x - ev.clientX * DRAG_SPEED;
+    map.dragStart.y = map.y - ev.clientY * DRAG_SPEED;
 
     //make canvas overlay the toolbar so that dragging it over the toolbar doesn't stop the drag
-    canvas.style.zIndex = "2";
+    canvas.style.zIndex = "4";
 }
 
-function dragEnd(event) {
+function dragEnd(ev) {
     map.drag = false;
 
     //reset canvas z-index
     canvas.style.zIndex = "1";
 }
 
-function moveMap(event) {
-    map.x = map.dragStart.x + event.clientX * DRAG_SPEED;
-    map.y = map.dragStart.y + event.clientY * DRAG_SPEED;
+function moveMap(ev) {
+    map.x = map.dragStart.x + ev.clientX * DRAG_SPEED;
+    map.y = map.dragStart.y + ev.clientY * DRAG_SPEED;
     
     window.requestAnimationFrame(update);
 }
+
+function scaleCoordinate(coordinate, origin, factor) {
+    xStart = coordinate;
+
+    //scale scale cordinates of point
+    xScaled = xStart + (xStart - origin) * factor;
+
+    //move point cordinates
+    xMoved = (xScaled + origin * factor);
+
+    return xMoved;
+}
+
+
+
+
+
+//MISCELLANEOUS
+document.addEventListener('contextmenu', (ev) => {
+    ev.preventDefault();
+});
