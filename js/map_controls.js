@@ -2,6 +2,8 @@
 canvas.addEventListener("wheel", (ev) => {
     if(map.drag) {return}
 
+    waypoint.hideWaypoint();
+
     let direction = -1;
     //cursor coordinates
     let cX = ev.clientX;
@@ -43,8 +45,30 @@ canvas.addEventListener("wheel", (ev) => {
     window.requestAnimationFrame(update);
 });
 
-
 canvas.addEventListener("mousedown", (ev) => {
+    //check for waypoint press
+    if(ev.button == 0) {
+        cX = ev.clientX;
+        cY = ev.clientY;
+
+        for(i = 0; i < tool.waypoint.waypoints.length; i++) {
+            wX = tool.waypoint.waypoints[i].x + map.x;
+            wY = tool.waypoint.waypoints[i].y + map.y;
+
+            x = cX - wX;
+            y = cY - wY;
+
+            if((x*x + y*y) < 20*20) {
+                waypoint.showWaypoint(tool.waypoint.waypoints[i]);
+                tool.waypoint.selWaypoint = i;
+                return;
+            }
+        }
+    }
+
+    waypoint.hideWaypoint();
+
+    //check for everything else
     if(ev.button == 1) { 
         dragStart(ev) 
 
@@ -69,10 +93,17 @@ canvas.addEventListener("mouseup", (ev) => {
     }
 });
 canvas.addEventListener("mousemove", (ev) => {
-    if (map.drag) { moveMap(ev) } //move map
-    else if(tool.selTool != undefined) {
+    if (map.drag) { 
+        moveMap(ev);
+        waypoint.hideWaypoint();
+    } else if(tool.selTool != undefined) {
         tool.selTool.mouseMoveEvent(ev);
     }
+});
+//ctrl-z
+window.addEventListener("keydown", (ev) => {
+    if (ev.key == "z" && ev.ctrlKey && !ev.altKey) tool.selTool.undoEvent();
+    if (ev.key == "z" && ev.ctrlKey &&  ev.altKey) tool.selTool.singleUndoEvent();
 });
 
 
@@ -86,19 +117,19 @@ function dragStart(ev) {
     map.dragStart.y = map.y - ev.clientY * DRAG_SPEED;
 
     //make canvas overlay the toolbar so that dragging it over the toolbar doesn't stop the drag
-    canvas.style.zIndex = "4";
+    //canvas.style.zIndex = "4";
 }
 
 function dragEnd(ev) {
     map.drag = false;
 
     //reset canvas z-index
-    canvas.style.zIndex = "1";
+    //canvas.style.zIndex = "1";
 }
 
 function moveMap(ev) {
-    map.x = map.dragStart.x + ev.clientX * DRAG_SPEED;
-    map.y = map.dragStart.y + ev.clientY * DRAG_SPEED;
+    map.x = Math.floor(map.dragStart.x + ev.clientX * DRAG_SPEED);
+    map.y = Math.floor(map.dragStart.y + ev.clientY * DRAG_SPEED);
     
     window.requestAnimationFrame(update);
 }
@@ -114,7 +145,6 @@ function scaleCoordinate(coordinate, origin, factor) {
 
     return xMoved;
 }
-
 
 
 

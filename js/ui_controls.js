@@ -9,12 +9,19 @@ let ui = {
     newBrush: document.getElementById("new-brush-btn"),
     thicknessDisplay: document.getElementById("thickness-display"),
     colorPicker: document.getElementById("color-picker"),
-    thicknessInput: document.getElementById("thickness-input"),
-    waypointTemplate: document.getElementById("waypoint-template").content,
+    thicknessSlider: document.getElementById("thickness-input"),
     waypointContainer: document.getElementById("waypoint-container"),
+    nameInput: document.getElementById("name-input"),
+    fill: document.getElementById("fill-checkbox"),
+    fillColorPicker: document.getElementById("fill-color-picker"),
+    fillTransparencySlider: document.getElementById("transparency-input"),
+    fillTransparencyDisplay: document.getElementById("transparency-display"),
+    waypointBox: document.getElementById("waypoint-box"),
+    waypointTextArea: document.getElementById("waypoint-textarea"),
+    waypointName: document.getElementById("waypoint-name"),
 
     //methods
-    addBrushBtn: function addBrushBtn(color) {
+    addBrushBtn: (color) => {
         let btn = document.createElement('button');
         ui.brushBtnCont.appendChild(btn);
     
@@ -28,13 +35,26 @@ let ui = {
 }
 
 //ev listeners
-ui.pencil.addEventListener("click", function(ev) { tool.selTool = pencil });
-ui.poly.addEventListener("click", function(ev) { tool.selTool = poly });
-ui.waypoint.addEventListener("click", function(ev) { tool.selTool = waypoint });
-ui.newBrush.addEventListener("click", function() { tool.brush.addBrush("#ffffff", 5) });
+ui.pencil.addEventListener("click", (ev) => { 
+    tool.selTool = pencil;
+    tool.toolActive = false;
+});
+ui.poly.addEventListener("click", (ev) => { 
+    tool.selTool = poly;
+    tool.toolActive = false;
+});
+ui.waypoint.addEventListener("click", (ev) => { 
+    tool.selTool = waypoint;
+    tool.toolActive = false;
+});
+ui.newBrush.addEventListener("click", () => { tool.brush.addBrush("#ffffff", 5) });
 ui.brushBtnCont.addEventListener( "click", selectBrush);
-ui.colorPicker.addEventListener("change", selectColor);
-ui.thicknessInput.addEventListener("input", selectThickness);
+ui.colorPicker.addEventListener("input", selectColor);
+ui.thicknessSlider.addEventListener("input", selectThickness);
+ui.nameInput.addEventListener("input", setName);
+ui.fill.addEventListener("change", toggleFill);
+ui.fillColorPicker.addEventListener("input", selectFillColor);
+ui.fillTransparencySlider.addEventListener("input", selectFillTransparency);
 
 //change brush color
 function selectColor(ev) {
@@ -52,13 +72,46 @@ function selectColor(ev) {
 
 //change brush thickness
 function selectThickness(ev) {
-    if(tool.brush.selBrush == undefined) {return}
-
     let thickness = ev.target.value;
+    ui.thicknessDisplay.textContent = thickness;
+
+    if(tool.brush.selBrush == undefined) {return}
 
     tool.brush.brushes[tool.brush.selBrush].thickness = thickness;
     ui.thicknessDisplay.textContent = thickness;
 
+    update();
+}
+
+//toggle fill
+function toggleFill(ev) {
+    if(tool.brush.selBrush == undefined) {return}
+
+    let value = ev.target.checked;
+    tool.brush.brushes[tool.brush.selBrush].fill = value;
+    
+    update();
+}
+
+//change fill color 
+function selectFillColor(ev) {
+    if(tool.brush.selBrush == undefined) {return}
+
+    let color = ev.target.value;
+    tool.brush.brushes[tool.brush.selBrush].fillColor = color;
+    
+    update();
+}
+
+//change fill transparency
+function selectFillTransparency(ev) {
+    let transparency = ev.target.value;
+    ui.fillTransparencyDisplay.textContent = transparency;
+
+    if(tool.brush.selBrush == undefined) {return}
+
+    tool.brush.brushes[tool.brush.selBrush].transparency = transparency;
+    
     update();
 }
 
@@ -71,10 +124,20 @@ function selectBrush(ev) {
     tool.brush.selBrush = index;
     tool.toolActive = false;
 
+    brush = tool.brush.brushes[tool.brush.selBrush];
+
+    //change nameInput
+    ui.nameInput.value = ui.brushBtn[index].innerText;
+
     //ui changes
-    ui.colorPicker.value = tool.brush.brushes[tool.brush.selBrush].color;
-    ui.thicknessInput.value = tool.brush.brushes[tool.brush.selBrush].thickness;
-    ui.thicknessDisplay.textContent = tool.brush.brushes[tool.brush.selBrush].thickness;
+    ui.colorPicker.value = brush.color;
+    ui.thicknessSlider.value = brush.thickness;
+    ui.thicknessDisplay.textContent = brush.thickness;
+
+    ui.fill.checked = brush.fill;
+    ui.fillColorPicker.value = brush.fillColor;
+    ui.fillTransparencySlider.value = brush.transparency;
+    ui.fillTransparencyDisplay.innerText = brush.transparency;
 
     //change button color
     for(i = 0 ; i < ui.brushBtn.length; i++) {
@@ -82,6 +145,12 @@ function selectBrush(ev) {
     }
     ui.brushBtn[index].style.backgroundColor = "var(--panel)"
 
+}
+
+//change brush name
+function setName() {
+    if(tool.brush.selBrush == undefined) {return}
+    ui.brushBtn[tool.brush.selBrush].innerText = ui.nameInput.value;
 }
 
 //add default brush

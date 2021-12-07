@@ -29,6 +29,7 @@ let tool = {
         },
     },
     waypoint: {
+        selWaypoint: -1,
         waypoints: [],
         icon: new Image(),
     },

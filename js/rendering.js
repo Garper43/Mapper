@@ -3,9 +3,11 @@ const ctx = canvas.getContext('2d');
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
-ctx.webkitImageSmoothingEnabled = false;
-ctx.mozImageSmoothingEnabled = false;
-ctx.imageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = true;
+ctx.mozImageSmoothingEnabled = true;
+ctx.imageSmoothingEnabled = true;
+
+hexDigits = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
 
 //update canvas
 function update() {
@@ -43,7 +45,7 @@ map.image.file.onload = function() {
     update();
 }
 
-//load marker file
+//load waypoint image file
 tool.waypoint.icon.src = "assets/waypoint_icon.png";
 tool.waypoint.icon.onload = function() {
     update();
@@ -62,20 +64,57 @@ function drawBrushes() {
             ctx.lineWidth = brush.thickness * map.scale;
             ctx.beginPath();
 
-            ctx.moveTo(~~(brush.points.x[b][0] + map.x), ~~(brush.points.y[b][0] + map.y));
+            ctx.moveTo((brush.points.x[b][0] + map.x), (brush.points.y[b][0] + map.y));
 
             for( c in brush.points.x[b] ) { //loop through points
-                ctx.lineTo(~~(brush.points.x[b][c] + map.x), ~~(brush.points.y[b][c] + map.y));
+                ctx.lineTo((brush.points.x[b][c] + map.x), (brush.points.y[b][c] + map.y));
             }
 
+            //fill
+            if(brush.fill) {
+                ctx.fillStyle = brush.fillColor + toHex(brush.transparency*255);
+                ctx.fill();
+            }
+            
+            //stroke
             ctx.stroke();
         }
     } 
 }
 
+function toHex(value) {
+    a = Math.floor(value/16);
+    b = Math.floor(value - a*16);
+
+    //a & b are converted to strings here
+    a = hexDigits[a];
+    b = hexDigits[b];
+
+    return a + b;
+}
+
 function drawWaypoints() {
+    let x;
+    let y;
+
     for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
-        ctx.drawImage(tool.waypoint.icon, tool.waypoint.waypoints[i].x + map.x - 10, tool.waypoint.waypoints[i].y + map.y - 20, 20, 20);
+        x = tool.waypoint.waypoints[i].x + map.x;
+        y = tool.waypoint.waypoints[i].y + map.y;
+
+        ctx.drawImage(tool.waypoint.icon, x - 10, y - 20, 20, 20);
     }
+
+    if(map.scale >= 1) {
+        ctx.fillStyle = "black";
+        ctx.font = "20px sans-serif";
+
+        for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
+            x = tool.waypoint.waypoints[i].x + map.x;
+            y = tool.waypoint.waypoints[i].y + map.y;
+
+            ctx.fillText(tool.waypoint.waypoints[i].name, x + 10, y);
+        }    
+    }
+    
 }
 

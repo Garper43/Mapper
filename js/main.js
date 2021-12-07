@@ -6,7 +6,7 @@ map = {
         y: 0,
 
         //TODO: do something
-        src: "assets/mmap.png",
+        src: "assets/world.svg",
 
         //these dimentions are placeholders and will be replaced in image.file.onload()
         //they are used for calculating displayed image size

@@ -19,6 +19,24 @@ let poly = {
     mouseMoveEvent: function (ev) {
 
     },
+    undoEvent() {
+        tool.brush.brushes[tool.brush.selBrush].points.x.pop();
+        tool.brush.brushes[tool.brush.selBrush].points.y.pop();
+
+        update();
+    },
+    singleUndoEvent() {
+        let brush = tool.brush.brushes[tool.brush.selBrush];
+
+        brush.points.x[brush.points.x.length-1].pop();
+        brush.points.y[brush.points.y.length-1].pop();
+
+        if(brush.points.x[brush.points.x.length-1].length == 0) {
+            this.undoEvent(); //delete current stroke
+        }
+
+        update();
+    },
 
     //methods
     addPoint: function (ev) {
