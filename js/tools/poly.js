@@ -1,22 +1,22 @@
 let poly = {
     //evnts
-    LMBPressEvent: function (ev) {
+    LMBPressEvent(ev) {
         if(!tool.toolActive) {
             this.polyStart();    
         }
         
         this.addPoint(ev);
     },
-    LMBReleaseEvent: function (ev) {
+    LMBReleaseEvent(ev) {
 
     },
-    RMBPressEvent: function (ev) {
+    RMBPressEvent(ev) {
         this.polyEnd();
     },
-    RMBReleaseEvent: function (ev) {
+    RMBReleaseEvent(ev) {
 
     },
-    mouseMoveEvent: function (ev) {
+    mouseMoveEvent(ev) {
 
     },
     undoEvent() {

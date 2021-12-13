@@ -16,8 +16,8 @@ canvas.addEventListener("wheel", (ev) => {
     map.scale = map.scale + (map.scale * ZOOM_SPEED * direction);
 
     //move the map
-    map.x = (map.x - (cX - map.x) * ZOOM_SPEED * direction);
-    map.y = (map.y - (cY - map.y) * ZOOM_SPEED * direction);
+    map.x = ~~(map.x - (cX - map.x) * ZOOM_SPEED * direction);
+    map.y = ~~(map.y - (cY - map.y) * ZOOM_SPEED * direction);
     //scale the map
     map.image.displayWidth = (map.image.baseWidth * map.scale);
     map.image.displayHeight = (map.image.baseHeight * map.scale);
@@ -47,7 +47,7 @@ canvas.addEventListener("wheel", (ev) => {
 
 canvas.addEventListener("mousedown", (ev) => {
     //check for waypoint press
-    if(ev.button == 0) {
+    if(ev.button == 0 && tool.selTool != pointer) {
         cX = ev.clientX;
         cY = ev.clientY;
 
@@ -102,8 +102,8 @@ canvas.addEventListener("mousemove", (ev) => {
 });
 //ctrl-z
 window.addEventListener("keydown", (ev) => {
-    if (ev.key == "z" && ev.ctrlKey && !ev.altKey) tool.selTool.undoEvent();
-    if (ev.key == "z" && ev.ctrlKey &&  ev.altKey) tool.selTool.singleUndoEvent();
+    if (ev.key == "z" && ev.ctrlKey && !ev.altKey) {tool.selTool.undoEvent()};
+    if (ev.key == "z" && ev.ctrlKey &&  ev.altKey) {tool.selTool.singleUndoEvent()};
 });
 
 

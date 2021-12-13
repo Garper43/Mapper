@@ -1,21 +1,23 @@
 let pencil = {
     pointer: new SmoothPointer(4),
+
+
     //evnts
     LMBPressEvent: function (ev) {
         this.pencilStart(ev);
         this.pointer.startPointer(ev);
         this.addPoint(ev);
     },
-    LMBReleaseEvent: function (ev) {
+    LMBReleaseEvent(ev) {
         this.pencilEnd();
     },
-    RMBPressEvent: function (ev) {
+    RMBPressEvent(ev) {
 
     },
-    RMBReleaseEvent: function (ev) {
+    RMBReleaseEvent(ev) {
 
     },
-    mouseMoveEvent: function (ev) {
+    mouseMoveEvent(ev) {
         if(!tool.toolActive) {return}
 
         this.pointer.movePointer(ev);
@@ -77,3 +79,4 @@ let pencil = {
         // }
     },
 }
+

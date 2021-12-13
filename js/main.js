@@ -1,9 +1,6 @@
 map = {
     image: {
         file: new Image(),
-        
-        x: 0,
-        y: 0,
 
         //TODO: do something
         src: "assets/world.svg",

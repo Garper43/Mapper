@@ -12,7 +12,7 @@ hexDigits = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
 //update canvas
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(map.image.file, map.image.x + map.x, map.image.y + map.y, map.image.displayWidth, map.image.displayHeight);
+    ctx.drawImage(map.image.file, ~~map.x, ~~map.y, ~~map.image.displayWidth, ~~map.image.displayHeight);
 
     drawBrushes();
     drawWaypoints();
@@ -64,10 +64,10 @@ function drawBrushes() {
             ctx.lineWidth = brush.thickness * map.scale;
             ctx.beginPath();
 
-            ctx.moveTo((brush.points.x[b][0] + map.x), (brush.points.y[b][0] + map.y));
+            ctx.moveTo(~~(brush.points.x[b][0] + map.x), ~~(brush.points.y[b][0] + map.y));
 
             for( c in brush.points.x[b] ) { //loop through points
-                ctx.lineTo((brush.points.x[b][c] + map.x), (brush.points.y[b][c] + map.y));
+                ctx.lineTo(~~(brush.points.x[b][c] + map.x), ~~(brush.points.y[b][c] + map.y));
             }
 
             //fill

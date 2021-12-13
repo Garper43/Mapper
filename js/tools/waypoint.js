@@ -1,18 +1,18 @@
 let waypoint = {
     //evnts
-    LMBPressEvent: function (ev) {
+    LMBPressEvent(ev) {
         this.addWaypoint(ev);
     },
-    LMBReleaseEvent: function (ev) {
+    LMBReleaseEvent(ev) {
 
     },
-    RMBPressEvent: function (ev) {
+    RMBPressEvent(ev) {
 
     },
-    RMBReleaseEvent: function (ev) {
+    RMBReleaseEvent(ev) {
 
     },
-    mouseMoveEvent: function (ev) {
+    mouseMoveEvent(ev) {
 
     },
     undoEvent() {
