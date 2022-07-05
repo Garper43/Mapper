@@ -3,7 +3,7 @@ map = {
         file: new Image(),
 
         //TODO: do something
-        src: "assets/world.svg",
+        src: "assets/world.png",
 
         //these dimentions are placeholders and will be replaced in image.file.onload()
         //they are used for calculating displayed image size

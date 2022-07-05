@@ -3,16 +3,16 @@ const ctx = canvas.getContext('2d');
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
-ctx.webkitImageSmoothingEnabled = true;
-ctx.mozImageSmoothingEnabled = true;
-ctx.imageSmoothingEnabled = true;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.mozImageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false;
 
 hexDigits = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
 
 //update canvas
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(map.image.file, ~~map.x, ~~map.y, ~~map.image.displayWidth, ~~map.image.displayHeight);
+    ctx.drawImage(map.image.file, map.x, map.y, map.image.displayWidth, map.image.displayHeight);
 
     drawBrushes();
     drawWaypoints();
