@@ -1,0 +1,22 @@
+{
+    "image": {
+        "src": "assets/world.svg",
+
+        "baseWidth": 0,
+        "baseHeight": 0,
+
+        "displayWidth": 0,
+        "displayHeight": 0
+    },
+    
+    "x": 0,
+    "y": 0,
+
+    "drag": false,
+    "draw": false,
+    "dragStart": {
+        "x": 0,
+        "y": 0
+    },
+    "scale": 1
+}
