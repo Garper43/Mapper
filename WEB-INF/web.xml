@@ -18,13 +18,13 @@
 <web-app>
 
 	<servlet>
-		<servlet-name>MapperServlet</servlet-name>
-		<servlet-class>MapperServlet</servlet-class>
+		<servlet-name>MapJsonServlet</servlet-name>
+		<servlet-class>MapJsonServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>MapperServlet</servlet-name>
-		<url-pattern>/</url-pattern>
+		<servlet-name>MapJsonServlet</servlet-name>
+		<url-pattern>/MapJsonServlet</url-pattern>
 	</servlet-mapping>
 
 </web-app>

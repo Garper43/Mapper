@@ -1,37 +1,39 @@
-import org.apache.catalina.servlets.DefaultServlet;
-
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
-public class MapperServlet extends HttpServlet {
-    private final String APP_DIR = "webapps/Mapper/";
+public class MapJsonServlet extends HttpServlet {
+    private final String MAPS_DIR = "webapps/Mapper/maps/";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DefaultServlet ds = new DefaultServlet();
-        ds.service(request, response);
-        
+        PrintWriter out = response.getWriter();
+        out.println("Hello");
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         ServletContext context = getServletContext();
         try {
-            PrintWriter out = response.getWriter();
-            out.println("Hello");
+            //read request
+            Scanner scn = new Scanner(request.getInputStream());
+            int mapId = scn.nextInt();
+            String mapJson = scn.next();
 
-            response.setStatus(201);
-            File file = new File(APP_DIR + "file.txt");
+            context.log(mapJson);
+
+            //create/find file to save map in
+            File file = new File(MAPS_DIR + mapId + ".json");
             file.createNewFile();
 
-            FileWriter fw = new FileWriter(file, true);
-            String text = new String(request.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-            fw.write(text);
-            fw.flush();
+            //write map data to file
+            FileWriter fw = new FileWriter(file, false);
+            fw.write(mapJson);
             fw.close();
 
+            //response.setStatus(201);
             context.log("success");
         } catch(Exception e) {
             context.log("error", e);

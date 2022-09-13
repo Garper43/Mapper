@@ -16,25 +16,65 @@
 //     return data;
 // }
 
-// async function foo() {
-//     var data = await getData("http://localhost:8080/Mapper/js/map.json");
+// async function loadMap(id) {
+//     var link = "http://localhost:8080/Mapper/maps/" + id + ".json";
+//     var data = await getData(link);
 //     console.log(data);
 
 //     map = data;
 //     map.image.file = new Image();
+
+//     map.image.file.src = map.image.src;
+//     map.image.file.onload = () => {
+//         let imgWidth = map.image.file.naturalWidth;
+//         let imgHeight = map.image.file.naturalHeight;
+
+//         //set base image size and offset
+//         if(imgHeight > imgWidth) {
+//             map.image.baseWidth = canvas.height * (imgWidth/imgHeight);
+//             map.image.baseHeight = canvas.height;
+
+//             map.x = (canvas.width - map.image.baseWidth) / 2;
+//         } else {
+//             map.image.baseHeight = canvas.width * (imgHeight/imgWidth);
+//             map.image.baseWidth = canvas.width;
+
+//             map.y = (canvas.height - map.image.baseHeight) / 2;
+//         }
+        
+//         //set initial display image size
+//         map.image.displayWidth = map.image.baseWidth * map.scale;
+//         map.image.displayHeight = map.image.baseHeight * map.scale;
+
+//         //initial image draw
+//         update();
+//     }
 // }
 
-// foo();
+// function saveMap(mapId) {
+//     let request = new XMLHttpRequest();
+//     request.open("POST", "/Mapper/MapJsonServlet");
+
+//     var fileCopy = map.image.file;
+//     delete map.image.file;
+
+//     var content = mapId + "\n" + JSON.stringify(map);
+
+//     request.send(content);
+    
+//     console.log(content);
+    
+//     map.image.file = fileCopy;
+// }
 
 var map = {
     image: {
         file: new Image(),
-
-        //TODO: do something
-        src: "assets/world.png",
+        src: "assets/empty.svg",
 
         //these dimentions are placeholders and will be replaced in image.file.onload()
         //they are used for calculating displayed image size
+        //TODO: try replacing these with a single aspect ratio
         baseWidth: 0,
         baseHeight: 0,
 

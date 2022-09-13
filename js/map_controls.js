@@ -135,10 +135,8 @@ function moveMap(ev) {
 }
 
 function scaleCoordinate(coordinate, origin, factor) {
-    xStart = coordinate;
-
     //scale scale cordinates of point
-    xScaled = xStart + (xStart - origin) * factor;
+    xScaled = coordinate + (coordinate - origin) * factor;
 
     //move point cordinates
     xMoved = (xScaled + origin * factor);

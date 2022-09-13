@@ -32,5 +32,5 @@ let tool = {
         selWaypoint: -1,
         waypoints: [],
         icon: new Image(),
-    },
+    }
 }
