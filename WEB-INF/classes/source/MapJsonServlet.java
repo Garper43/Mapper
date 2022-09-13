@@ -1,3 +1,5 @@
+import org.apache.catalina.servlets.DefaultServlet;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
@@ -7,16 +9,10 @@ public class MapperServlet extends HttpServlet {
     private final String APP_DIR = "webapps/Mapper/";
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("<html><body>");
-            out.println("<h1>Hello Worlddddd plz run</h1>");
-            out.println("</body></html>");
-        } catch(Exception e) {
-
-        }
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DefaultServlet ds = new DefaultServlet();
+        ds.service(request, response);
+        
     }
 
     @Override
