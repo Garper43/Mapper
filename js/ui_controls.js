@@ -68,7 +68,7 @@ function selectColor(ev) {
     let color = ev.target.value;
     let btn = ui.brushBtn[tool.brush.selBrush];
 
-    tool.brush.brushes[tool.brush.selBrush].color = color;
+    map.toolData.brushes[tool.brush.selBrush].color = color;
     btn.style.borderLeft = "4px solid " + color;
     btn.style.borderRight = "4px solid " + color;
     
@@ -82,7 +82,7 @@ function selectThickness(ev) {
 
     if(tool.brush.selBrush == undefined) {return}
 
-    tool.brush.brushes[tool.brush.selBrush].thickness = thickness;
+    map.toolData.brushes[tool.brush.selBrush].thickness = thickness;
     ui.thicknessDisplay.textContent = thickness;
 
     update();
@@ -93,7 +93,7 @@ function toggleFill(ev) {
     if(tool.brush.selBrush == undefined) {return}
 
     let value = ev.target.checked;
-    tool.brush.brushes[tool.brush.selBrush].fill = value;
+    map.toolData.brushes[tool.brush.selBrush].fill = value;
     
     update();
 }
@@ -103,7 +103,7 @@ function selectFillColor(ev) {
     if(tool.brush.selBrush == undefined) {return}
 
     let color = ev.target.value;
-    tool.brush.brushes[tool.brush.selBrush].fillColor = color;
+    map.toolData.brushes[tool.brush.selBrush].fillColor = color;
     
     update();
 }
@@ -115,7 +115,7 @@ function selectFillTransparency(ev) {
 
     if(tool.brush.selBrush == undefined) {return}
 
-    tool.brush.brushes[tool.brush.selBrush].transparency = transparency;
+    map.toolData.brushes[tool.brush.selBrush].transparency = transparency;
     
     update();
 }
@@ -129,7 +129,7 @@ function selectBrush(ev) {
     tool.brush.selBrush = index;
     tool.toolActive = false;
 
-    brush = tool.brush.brushes[tool.brush.selBrush];
+    brush = map.toolData.brushes[tool.brush.selBrush];
 
     //change nameInput
     ui.nameInput.value = ui.brushBtn[index].innerText;

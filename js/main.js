@@ -70,6 +70,7 @@
 var map = {
     image: {
         file: new Image(),
+        //TODO: this is a bit redundant, try to get rid of it later
         src: "assets/empty.svg",
 
         //these dimentions are placeholders and will be replaced in image.file.onload()
@@ -94,8 +95,93 @@ var map = {
         y: 0
     },
     scale: 1,
+
+    toolData: {
+        brushes: [],
+        waypoints: []
+    },
+
+    utils: {
+        loadMap: async (id) => {
+            var link = "http://localhost:8080/Mapper/maps/" + id + ".json";
+            var tempMap = await map.utils.getData(link);
+
+            //reset map position
+            map.x = 0;
+            map.y = 0;
+
+            //set up tool data
+            map.toolData = tempMap.toolData;
+
+            //set up map image
+            map.image.file = new Image();
+            map.image.file.src = tempMap.imageSrc;
+            map.image.file.onload = () => {
+                let imgWidth = map.image.file.naturalWidth;
+                let imgHeight = map.image.file.naturalHeight;
+
+                //set base image size and offset
+                if(imgHeight > imgWidth) {
+                    map.image.baseWidth = canvas.height * (imgWidth/imgHeight);
+                    map.image.baseHeight = canvas.height;
+
+                    map.x = (canvas.width - map.image.baseWidth) / 2;
+                } else {
+                    map.image.baseHeight = canvas.width * (imgHeight/imgWidth);
+                    map.image.baseWidth = canvas.width;
+
+                    map.y = (canvas.height - map.image.baseHeight) / 2;
+                }
+                
+                //set initial display image size
+                map.image.displayWidth = map.image.baseWidth * map.scale;
+                map.image.displayHeight = map.image.baseHeight * map.scale;
+
+                //initial image draw
+                update();
+            }
+        },
+
+        saveMap: (mapId) => {
+            let tempMap = {};
+            tempMap.imageSrc = map.image.file.src;
+            tempMap.toolData = map.toolData;
+
+            console.log(tempMap);
+            let serializedMap = JSON.stringify(tempMap);
+            console.log(serializedMap);
+
+
+            let request = new XMLHttpRequest();
+            request.open("POST", "/Mapper/MapJsonServlet");
+        
+            var content = mapId + "\n" + serializedMap;
+        
+            request.send(content);
+        },
+
+        getData: async (link) => {
+            var data;
+        
+            await fetch(link)
+            .then((response) => {
+                return response.json();
+        
+            })
+            .then((json) => {
+                data = json;
+        
+            }) 
+        
+            return data;
+        },
+
+        serializeToJSON: () => {
+
+        }
+    }
 }
 
-function change(variable, target) {
-    variable.image.baseWidth = target;
-}
+// function change(variable, target) {
+//     variable.image.baseWidth = target;
+// }

@@ -17,20 +17,18 @@ let tool = {
 
     brush: {
         selBrush: undefined, //index of the selected brush inside brushTool.brushes
-        brushes: [], //stores every brush object
 
         //methods
         addBrush: function (color, thickness) {
             let brush = new Brush(color, thickness);
         
-            this.brushes.push(brush);
+            map.toolData.brushes.push(brush);
             //brushTool.selBrush = brushTool.brushes.length - 1;
             ui.addBrushBtn(color);
         },
     },
     waypoint: {
         selWaypoint: -1,
-        waypoints: [],
         icon: new Image(),
     }
 }

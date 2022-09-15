@@ -31,11 +31,11 @@ let pointer = {
             s = this.selectedPoint.strokeIndex;
             p = this.selectedPoint.pointIndex;
 
-            tool.brush.brushes[b].points.x[s][p] = cX - map.x;
-            tool.brush.brushes[b].points.y[s][p] = cY - map.y;
+            map.toolData.brushes[b].points.x[s][p] = cX - map.x;
+            map.toolData.brushes[b].points.y[s][p] = cY - map.y;
         }else {
-            tool.waypoint.waypoints[this.selectedWaypointIndex].x = cX - map.x;
-            tool.waypoint.waypoints[this.selectedWaypointIndex].y = cY - map.y;
+            map.toolData.waypoints[this.selectedWaypointIndex].x = cX - map.x;
+            map.toolData.waypoints[this.selectedWaypointIndex].y = cY - map.y;
         }
 
         update();
@@ -53,8 +53,8 @@ let pointer = {
         let cX = ev.clientX;
         let cY = ev.clientY;
 
-        for(b = 0; b < tool.brush.brushes.length; b++) { //iterate through brushes
-            brush = tool.brush.brushes[b];
+        for(b = 0; b < map.toolData.brushes.length; b++) { //iterate through brushes
+            brush = map.toolData.brushes[b];
         
             for(s = 0; s < brush.points.x.length; s++) { //iterate through strokes
 
@@ -75,9 +75,9 @@ let pointer = {
             } 
         }  
 
-        for(i = 0; i < tool.waypoint.waypoints.length; i++) {
-            x = tool.waypoint.waypoints[i].x+map.x;
-            y = tool.waypoint.waypoints[i].y+map.y;
+        for(i = 0; i < map.toolData.waypoints.length; i++) {
+            x = map.toolData.waypoints[i].x+map.x;
+            y = map.toolData.waypoints[i].y+map.y;
 
             if(Math.pow(x-cX, 2) + Math.pow(y-cY, 2) < Math.pow(minRadius, 2)) {
                 this.selectedWaypointIndex = i;

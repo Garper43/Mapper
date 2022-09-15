@@ -51,9 +51,9 @@ tool.waypoint.icon.onload = function() {
 }
 
 function drawBrushes() {
-    for( a in tool.brush.brushes ) { //loop through brushes
+    for( a in map.toolData.brushes ) { //loop through brushes
 
-        let brush = tool.brush.brushes[a];
+        let brush = map.toolData.brushes[a];
         ctx.fillStyle = brush.color;
         ctx.strokeStyle = brush.color;
         ctx.lineCap = 'round';
@@ -96,9 +96,9 @@ function drawWaypoints() {
     let x;
     let y;
 
-    for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
-        x = tool.waypoint.waypoints[i].x + map.x;
-        y = tool.waypoint.waypoints[i].y + map.y;
+    for( i = 0 ; i < map.toolData.waypoints.length ; i++ ) {
+        x = map.toolData.waypoints[i].x + map.x;
+        y = map.toolData.waypoints[i].y + map.y;
 
         ctx.drawImage(tool.waypoint.icon, x - 10, y - 20, 20, 20);
     }
@@ -107,11 +107,11 @@ function drawWaypoints() {
         ctx.fillStyle = "black";
         ctx.font = "20px sans-serif";
 
-        for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
-            x = tool.waypoint.waypoints[i].x + map.x;
-            y = tool.waypoint.waypoints[i].y + map.y;
+        for( i = 0 ; i < map.toolData.waypoints.length ; i++ ) {
+            x = map.toolData.waypoints[i].x + map.x;
+            y = map.toolData.waypoints[i].y + map.y;
 
-            ctx.fillText(tool.waypoint.waypoints[i].name, x + 10, y);
+            ctx.fillText(map.toolData.waypoints[i].name, x + 10, y);
         }    
     }
     

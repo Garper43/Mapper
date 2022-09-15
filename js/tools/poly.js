@@ -20,13 +20,13 @@ let poly = {
 
     },
     undoEvent() {
-        tool.brush.brushes[tool.brush.selBrush].points.x.pop();
-        tool.brush.brushes[tool.brush.selBrush].points.y.pop();
+        map.toolData.brushes[tool.brush.selBrush].points.x.pop();
+        map.toolData.brushes[tool.brush.selBrush].points.y.pop();
 
         update();
     },
     singleUndoEvent() {
-        let brush = tool.brush.brushes[tool.brush.selBrush];
+        let brush = map.toolData.brushes[tool.brush.selBrush];
 
         brush.points.x[brush.points.x.length-1].pop();
         brush.points.y[brush.points.y.length-1].pop();
@@ -40,7 +40,7 @@ let poly = {
 
     //methods
     addPoint: function (ev) {
-        let brush = tool.brush.brushes[tool.brush.selBrush];
+        let brush = map.toolData.brushes[tool.brush.selBrush];
         brush.points.x[brush.points.x.length - 1].push((ev.clientX - map.x));
         brush.points.y[brush.points.y.length - 1].push((ev.clientY - map.y));
         window.requestAnimationFrame(update);
@@ -49,8 +49,8 @@ let poly = {
     polyStart: function polyStart() { 
         tool.toolActive = true;
 
-        tool.brush.brushes[tool.brush.selBrush].points.x.push([]);
-        tool.brush.brushes[tool.brush.selBrush].points.y.push([]);
+        map.toolData.brushes[tool.brush.selBrush].points.x.push([]);
+        map.toolData.brushes[tool.brush.selBrush].points.y.push([]);
     },
 
     polyEnd: function polyEnd() {

@@ -24,8 +24,8 @@ canvas.addEventListener("wheel", (ev) => {
 
     //scale brushes
     //TODO: make this readable
-    for( a in tool.brush.brushes ) { //loop through brushes
-        let brush = tool.brush.brushes[a];
+    for( a in map.toolData.brushes ) { //loop through brushes
+        let brush = map.toolData.brushes[a];
 
         for( b in brush.points.x ) { //loop through  brush strokes
             for( c in brush.points.x[b] ) { //loop through  brush points
@@ -36,9 +36,9 @@ canvas.addEventListener("wheel", (ev) => {
     }
 
     //scale waypoints
-    for( i = 0 ; i < tool.waypoint.waypoints.length ; i++ ) {
-        tool.waypoint.waypoints[i].x = scaleCoordinate(tool.waypoint.waypoints[i].x, cX, ZOOM_SPEED * direction);
-        tool.waypoint.waypoints[i].y = scaleCoordinate(tool.waypoint.waypoints[i].y, cY, ZOOM_SPEED * direction);
+    for( i = 0 ; i < map.toolData.waypoints.length ; i++ ) {
+        map.toolData.waypoints[i].x = scaleCoordinate(map.toolData.waypoints[i].x, cX, ZOOM_SPEED * direction);
+        map.toolData.waypoints[i].y = scaleCoordinate(map.toolData.waypoints[i].y, cY, ZOOM_SPEED * direction);
     }
 
     //update canvas
@@ -51,15 +51,15 @@ canvas.addEventListener("mousedown", (ev) => {
         cX = ev.clientX;
         cY = ev.clientY;
 
-        for(i = 0; i < tool.waypoint.waypoints.length; i++) {
-            wX = tool.waypoint.waypoints[i].x + map.x;
-            wY = tool.waypoint.waypoints[i].y + map.y;
+        for(i = 0; i < map.toolData.waypoints.length; i++) {
+            wX = map.toolData.waypoints[i].x + map.x;
+            wY = map.toolData.waypoints[i].y + map.y;
 
             x = cX - wX;
             y = cY - wY;
 
             if((x*x + y*y) < 20*20) {
-                waypoint.showWaypoint(tool.waypoint.waypoints[i]);
+                waypoint.showWaypoint(map.toolData.waypoints[i]);
                 tool.waypoint.selWaypoint = i;
                 return;
             }

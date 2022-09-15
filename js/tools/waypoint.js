@@ -16,7 +16,7 @@ let waypoint = {
 
     },
     undoEvent() {
-        tool.waypoint.waypoints.pop();
+        map.toolData.waypoints.pop();
         update();
     },
     singleUndoEvent() {
@@ -25,7 +25,7 @@ let waypoint = {
 
     //methods
     addWaypoint: function (ev) {
-        tool.waypoint.waypoints.push(new Waypoint(ev.clientX - map.x, ev.clientY - map.y));
+        map.toolData.waypoints.push(new Waypoint(ev.clientX - map.x, ev.clientY - map.y));
         update();
     },
     showWaypoint: function (waypoint) {
@@ -46,11 +46,11 @@ let waypoint = {
         if(tool.waypoint.selWaypoint == -1) {return}
 
         //save changes
-        tool.waypoint.waypoints[tool.waypoint.selWaypoint].width = ui.waypointBox.offsetWidth - 20;
-        tool.waypoint.waypoints[tool.waypoint.selWaypoint].height = ui.waypointBox.offsetHeight - 20;
+        map.toolData.waypoints[tool.waypoint.selWaypoint].width = ui.waypointBox.offsetWidth - 20;
+        map.toolData.waypoints[tool.waypoint.selWaypoint].height = ui.waypointBox.offsetHeight - 20;
 
-        tool.waypoint.waypoints[tool.waypoint.selWaypoint].name = ui.waypointName.value;
-        tool.waypoint.waypoints[tool.waypoint.selWaypoint].content = ui.waypointTextArea.value;
+        map.toolData.waypoints[tool.waypoint.selWaypoint].name = ui.waypointName.value;
+        map.toolData.waypoints[tool.waypoint.selWaypoint].content = ui.waypointTextArea.value;
 
 
         tool.waypoint.selWaypoint = -1;

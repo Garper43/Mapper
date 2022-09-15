@@ -24,13 +24,13 @@ let pencil = {
         this.addPoint(ev);
     },
     undoEvent() {
-        tool.brush.brushes[tool.brush.selBrush].points.x.pop();
-        tool.brush.brushes[tool.brush.selBrush].points.y.pop();
+        map.toolData.brushes[tool.brush.selBrush].points.x.pop();
+        map.toolData.brushes[tool.brush.selBrush].points.y.pop();
 
         update();
     },
     singleUndoEvent() {
-        let brush = tool.brush.brushes[tool.brush.selBrush];
+        let brush = map.toolData.brushes[tool.brush.selBrush];
 
         brush.points.x[brush.points.x.length-1].pop();
         brush.points.y[brush.points.y.length-1].pop();
@@ -44,7 +44,7 @@ let pencil = {
 
     //methods
     addPoint: function (ev) {
-        let brush = tool.brush.brushes[tool.brush.selBrush];
+        let brush = map.toolData.brushes[tool.brush.selBrush];
     
         brush.points.x[brush.points.x.length - 1].push((this.pointer.x - map.x));
         brush.points.y[brush.points.y.length - 1].push((this.pointer.y - map.y));
@@ -55,8 +55,8 @@ let pencil = {
     pencilStart: function (ev) {
         tool.toolActive = true;
     
-        tool.brush.brushes[tool.brush.selBrush].points.x.push([]);
-        tool.brush.brushes[tool.brush.selBrush].points.y.push([]);
+        map.toolData.brushes[tool.brush.selBrush].points.x.push([]);
+        map.toolData.brushes[tool.brush.selBrush].points.y.push([]);
     },
 
     pencilEnd: function () {
@@ -64,7 +64,7 @@ let pencil = {
 
         //TODO: consider this
         //remove some points
-        // let points = tool.brush.brushes[tool.brush.selBrush].points;
+        // let points = map.toolData.brushes[tool.brush.selBrush].points;
 
         // if(points.x[points.x.length - 1].length > 150) {
         //     for(a = 0; a < 1; a++) {
