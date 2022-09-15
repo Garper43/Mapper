@@ -71,7 +71,7 @@ var map = {
     image: {
         file: new Image(),
         //TODO: this is a bit redundant, try to get rid of it later
-        src: "assets/empty.svg",
+        src: "assets/o-block.png",
 
         //these dimentions are placeholders and will be replaced in image.file.onload()
         //they are used for calculating displayed image size
@@ -115,7 +115,7 @@ var map = {
 
             //set up map image
             map.image.file = new Image();
-            map.image.file.src = "assets/o-block.png";
+            map.image.file.src = tempMap.imageSrc;;
             map.image.file.onload = () => {
                 let imgWidth = map.image.file.naturalWidth;
                 let imgHeight = map.image.file.naturalHeight;
