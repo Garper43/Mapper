@@ -109,6 +109,7 @@ var map = {
             //reset map position
             map.x = 0;
             map.y = 0;
+            map.scale = 1;
 
             //set up tool data
             map.toolData = tempMap.toolData;
@@ -116,45 +117,6 @@ var map = {
             //set up map image
             map.image.file = new Image();
             map.image.file.src = tempMap.imageSrc;;
-            map.image.file.onload = () => {
-                let imgWidth = map.image.file.naturalWidth;
-                let imgHeight = map.image.file.naturalHeight;
-
-                //set base image size and offset
-                if(imgHeight > imgWidth) {
-                    map.image.baseWidth = canvas.height * (imgWidth/imgHeight);
-                    map.image.baseHeight = canvas.height;
-
-                    map.x = (canvas.width - map.image.baseWidth) / 2;
-                } else {
-                    map.image.baseHeight = canvas.width * (imgHeight/imgWidth);
-                    map.image.baseWidth = canvas.width;
-
-                    map.y = (canvas.height - map.image.baseHeight) / 2;
-                }
-                
-                //set initial display image size
-                map.image.displayWidth = map.image.baseWidth * map.scale;
-                map.image.displayHeight = map.image.baseHeight * map.scale;
-
-                //initial image draw
-                update();
-            }
-        },
-
-        loadMapStr: async (str) => {
-            let tempMap = JSON.parse(str);
-
-            //reset map position
-            map.x = 0;
-            map.y = 0;
-
-            //set up tool data
-            map.toolData = tempMap.toolData;
-
-            //set up map image
-            map.image.file = new Image();
-            map.image.file.src = tempMap.imageSrc;
             map.image.file.onload = () => {
                 let imgWidth = map.image.file.naturalWidth;
                 let imgHeight = map.image.file.naturalHeight;
