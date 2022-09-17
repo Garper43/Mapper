@@ -143,15 +143,13 @@ var map = {
             }
         },
 
+        //TODO: make a class for serialized map
         saveMap: (mapId) => {
             let tempMap = {};
             tempMap.imageSrc = map.image.file.src;
             tempMap.toolData = map.toolData;
 
-            console.log(tempMap);
             let serializedMap = JSON.stringify(tempMap);
-            console.log(serializedMap);
-
 
             let request = new XMLHttpRequest();
             request.open("POST", "/Mapper/MapJsonServlet");

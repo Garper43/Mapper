@@ -25,14 +25,21 @@ let waypoint = {
 
     //methods
     addWaypoint: function (ev) {
-        map.toolData.waypoints.push(new Waypoint(ev.clientX - map.x, ev.clientY - map.y));
+        let x = (ev.clientX - map.x) / (map.scale * map.image.baseWidth);
+        let y = (ev.clientY - map.y) / (map.scale * map.image.baseHeight);
+
+        map.toolData.waypoints.push(new Waypoint(x, y));
+        
         update();
     },
-    showWaypoint: function (waypoint) {
-        this.hideWaypoint();
+    showDescription: function (waypoint) {
+        this.hideDescription();
 
-        ui.waypointBox.style.left = waypoint.x + map.x + "px";
-        ui.waypointBox.style.top = waypoint.y + map.y + "px";
+        let x = map.toolData.waypoints[i].x * (map.scale * map.image.baseWidth) + map.x;
+        let y = map.toolData.waypoints[i].y * (map.scale * map.image.baseHeight) + map.y;
+
+        ui.waypointBox.style.left = x + "px";
+        ui.waypointBox.style.top = y + "px";
 
         ui.waypointBox.style.width = waypoint.width + "px";
         ui.waypointBox.style.height = waypoint.height + "px";
@@ -42,7 +49,7 @@ let waypoint = {
 
         ui.waypointBox.style.display = "block";
     },
-    hideWaypoint: function () {
+    hideDescription: function () {
         if(tool.waypoint.selWaypoint == -1) {return}
 
         //save changes
