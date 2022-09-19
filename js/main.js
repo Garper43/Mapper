@@ -116,7 +116,7 @@ var map = {
 
             //set up map image
             map.image.file = new Image();
-            map.image.file.src = tempMap.imageSrc;;
+            map.image.file.src = tempMap.imageSrc;
             map.image.file.onload = () => {
                 let imgWidth = map.image.file.naturalWidth;
                 let imgHeight = map.image.file.naturalHeight;
