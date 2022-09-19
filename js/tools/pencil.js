@@ -46,8 +46,8 @@ let pencil = {
     addPoint: function (ev) {
         let brush = map.toolData.brushes[tool.brush.selBrush];
     
-        brush.points.x[brush.points.x.length - 1].push((this.pointer.x - map.x));
-        brush.points.y[brush.points.y.length - 1].push((this.pointer.y - map.y));
+        brush.points.x[brush.points.x.length - 1].push((this.pointer.x - map.x) / (map.scale * map.image.baseWidth));
+        brush.points.y[brush.points.y.length - 1].push((this.pointer.y - map.y) / (map.scale * map.image.baseHeight));
 
         window.requestAnimationFrame(update);
     },

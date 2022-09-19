@@ -63,10 +63,16 @@ function drawBrushes() {
             ctx.lineWidth = brush.thickness * map.scale;
             ctx.beginPath();
 
-            ctx.moveTo(~~(brush.points.x[b][0] + map.x), ~~(brush.points.y[b][0] + map.y));
+            let x = brush.points.x[b][0] * (map.scale * map.image.baseWidth) + map.x;
+            let y = brush.points.y[b][0] * (map.scale * map.image.baseHeight) + map.y;
+
+            ctx.moveTo(~~x, ~~y);
 
             for( c in brush.points.x[b] ) { //loop through points
-                ctx.lineTo(~~(brush.points.x[b][c] + map.x), ~~(brush.points.y[b][c] + map.y));
+                x = brush.points.x[b][c] * (map.scale * map.image.baseWidth) + map.x;
+                y = brush.points.y[b][c] * (map.scale * map.image.baseHeight) + map.y;
+
+                ctx.lineTo(~~x, ~~y);
             }
 
             //fill
@@ -97,8 +103,8 @@ function drawWaypoints() {
     let y;
 
     for( i = 0 ; i < map.toolData.waypoints.length ; i++ ) {
-        x = map.toolData.waypoints[i].x + map.x;
-        y = map.toolData.waypoints[i].y + map.y;
+        x = map.toolData.waypoints[i].x * (map.scale * map.image.baseWidth) + map.x;
+        y = map.toolData.waypoints[i].y * (map.scale * map.image.baseHeight) + map.y;
 
         ctx.drawImage(tool.waypoint.icon, x - 10, y - 20, 20, 20);
     }
@@ -108,12 +114,22 @@ function drawWaypoints() {
         ctx.font = "20px sans-serif";
 
         for( i = 0 ; i < map.toolData.waypoints.length ; i++ ) {
-            x = map.toolData.waypoints[i].x + map.x;
-            y = map.toolData.waypoints[i].y + map.y;
+            x = map.toolData.waypoints[i].x * (map.scale * map.image.baseWidth) + map.x;
+            y = map.toolData.waypoints[i].y * (map.scale * map.image.baseHeight) + map.y;
 
             ctx.fillText(map.toolData.waypoints[i].name, x + 10, y);
         }    
     }
     
+}
+
+function scaleCoordinate(coordinate, origin, factor) {
+    //scale scale cordinates of point
+    xScaled = coordinate + (coordinate - origin) * factor;
+
+    //move point cordinates
+    xMoved = (xScaled + origin * factor);
+
+    return xMoved;
 }
 

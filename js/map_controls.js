@@ -2,16 +2,12 @@
 canvas.addEventListener("wheel", (ev) => {
     if(map.drag) {return}
 
-    waypoint.hideWaypoint();
+    waypoint.hideDescription();
 
-    let direction = -1;
+    let direction = (ev.deltaY > 0)?-1:1;
     //cursor coordinates
     let cX = ev.clientX;
     let cY = ev.clientY;
-    //check scroll direction
-    if (ev.deltaY < 0) {
-        direction = direction * -1;
-    }
     
     map.scale = map.scale + (map.scale * ZOOM_SPEED * direction);
 
@@ -21,25 +17,6 @@ canvas.addEventListener("wheel", (ev) => {
     //scale the map
     map.image.displayWidth = (map.image.baseWidth * map.scale);
     map.image.displayHeight = (map.image.baseHeight * map.scale);
-
-    //scale brushes
-    //TODO: make this readable
-    for( a in map.toolData.brushes ) { //loop through brushes
-        let brush = map.toolData.brushes[a];
-
-        for( b in brush.points.x ) { //loop through  brush strokes
-            for( c in brush.points.x[b] ) { //loop through  brush points
-                brush.points.x[b][c] = scaleCoordinate(brush.points.x[b][c], cX, ZOOM_SPEED * direction);
-                brush.points.y[b][c] = scaleCoordinate(brush.points.y[b][c], cY, ZOOM_SPEED * direction);
-            }  
-        }    
-    }
-
-    //scale waypoints
-    for( i = 0 ; i < map.toolData.waypoints.length ; i++ ) {
-        map.toolData.waypoints[i].x = scaleCoordinate(map.toolData.waypoints[i].x, cX, ZOOM_SPEED * direction);
-        map.toolData.waypoints[i].y = scaleCoordinate(map.toolData.waypoints[i].y, cY, ZOOM_SPEED * direction);
-    }
 
     //update canvas
     window.requestAnimationFrame(update);
@@ -52,21 +29,21 @@ canvas.addEventListener("mousedown", (ev) => {
         cY = ev.clientY;
 
         for(i = 0; i < map.toolData.waypoints.length; i++) {
-            wX = map.toolData.waypoints[i].x + map.x;
-            wY = map.toolData.waypoints[i].y + map.y;
+            wX = map.toolData.waypoints[i].x * (map.scale * map.image.baseWidth) + map.x;
+            wY = map.toolData.waypoints[i].y * (map.scale * map.image.baseHeight) + map.y;
 
             x = cX - wX;
             y = cY - wY;
 
             if((x*x + y*y) < 20*20) {
-                waypoint.showWaypoint(map.toolData.waypoints[i]);
+                waypoint.showDescription(map.toolData.waypoints[i]);
                 tool.waypoint.selWaypoint = i;
                 return;
             }
         }
     }
 
-    waypoint.hideWaypoint();
+    waypoint.hideDescription();
 
     //check for everything else
     if(ev.button == 1) { 
@@ -95,7 +72,7 @@ canvas.addEventListener("mouseup", (ev) => {
 canvas.addEventListener("mousemove", (ev) => {
     if (map.drag) { 
         moveMap(ev);
-        waypoint.hideWaypoint();
+        waypoint.hideDescription();
     } else if(tool.selTool != undefined) {
         tool.selTool.mouseMoveEvent(ev);
     }
@@ -133,19 +110,6 @@ function moveMap(ev) {
     
     window.requestAnimationFrame(update);
 }
-
-function scaleCoordinate(coordinate, origin, factor) {
-    //scale scale cordinates of point
-    xScaled = coordinate + (coordinate - origin) * factor;
-
-    //move point cordinates
-    xMoved = (xScaled + origin * factor);
-
-    return xMoved;
-}
-
-
-
 
 //MISCELLANEOUS
 document.addEventListener('contextmenu', (ev) => {

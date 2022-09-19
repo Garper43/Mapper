@@ -71,7 +71,7 @@ var map = {
     image: {
         file: new Image(),
         //TODO: this is a bit redundant, try to get rid of it later
-        src: "assets/empty.svg",
+        src: "assets/o-block.png",
 
         //these dimentions are placeholders and will be replaced in image.file.onload()
         //they are used for calculating displayed image size
@@ -109,6 +109,7 @@ var map = {
             //reset map position
             map.x = 0;
             map.y = 0;
+            map.scale = 1;
 
             //set up tool data
             map.toolData = tempMap.toolData;
@@ -142,15 +143,13 @@ var map = {
             }
         },
 
+        //TODO: make a class for serialized map
         saveMap: (mapId) => {
             let tempMap = {};
             tempMap.imageSrc = map.image.file.src;
             tempMap.toolData = map.toolData;
 
-            console.log(tempMap);
             let serializedMap = JSON.stringify(tempMap);
-            console.log(serializedMap);
-
 
             let request = new XMLHttpRequest();
             request.open("POST", "/Mapper/MapJsonServlet");
