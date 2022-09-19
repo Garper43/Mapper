@@ -20,7 +20,11 @@ public class MapJsonServlet extends HttpServlet {
             //read request
             Scanner scn = new Scanner(request.getInputStream());
             int mapId = scn.nextInt();
-            String mapJson = scn.next();
+            String mapJson = "";
+
+            while(scn.hasNextLine()) {
+                mapJson += scn.nextLine();
+            }
 
             context.log(mapJson);
 
