@@ -46,13 +46,10 @@ canvas.addEventListener("mousedown", (ev) => {
     waypoint.hideDescription();
 
     //check for everything else
-    if(ev.button == 1) { 
+    if(ev.button == 0) { 
         dragStart(ev) 
 
-    } else if(ev.button == 0) {
-        tool.selTool.LMBPressEvent(ev);
-
-    } else if(ev.button == 2) {
+    }  else if(ev.button == 2) {
         tool.selTool.RMBPressEvent(ev);
 
     }
